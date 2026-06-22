@@ -1,19 +1,19 @@
-
-
 const Trip = require("../models/Trip");
+const generateTripPlan = require("../utils/geminiService");
 
+// Create trip using AI/fallback response
 const createTrip = async (req, res) => {
   try {
-    const {
+    const { destination, numberOfDays, budgetType, interests } = req.body;
+
+    const aiTripData = await generateTripPlan({
       destination,
       numberOfDays,
       budgetType,
       interests,
-      itinerary,
-      budgetEstimate,
-      hotels,
-      travelTips,
-    } = req.body;
+    });
+
+    
 
     const trip = await Trip.create({
       user: req.user._id,
@@ -21,27 +21,47 @@ const createTrip = async (req, res) => {
       numberOfDays,
       budgetType,
       interests,
-      itinerary,
-      budgetEstimate,
-      hotels,
-      travelTips,
+      itinerary: Array.isArray(aiTripData.itinerary)
+        ? aiTripData.itinerary
+        : [],
+      budgetEstimate: aiTripData.budgetEstimate || {},
+      hotels: Array.isArray(aiTripData.hotels)
+        ? aiTripData.hotels
+        : [],
+      travelTips: Array.isArray(aiTripData.travelTips)
+        ? aiTripData.travelTips
+        : [],
     });
+
+   
 
     res.status(201).json(trip);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+
+    res.status(500).json({
+      message: "Failed to generate trip",
+      error: error.message,
+    });
   }
 };
 
+// Get all trips of logged-in user
 const getMyTrips = async (req, res) => {
   try {
-    const trips = await Trip.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const trips = await Trip.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
+
     res.json(trips);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
+// Get single trip of logged-in user
 const getTripById = async (req, res) => {
   try {
     const trip = await Trip.findOne({
@@ -50,12 +70,16 @@ const getTripById = async (req, res) => {
     });
 
     if (!trip) {
-      return res.status(404).json({ message: "Trip not found" });
+      return res.status(404).json({
+        message: "Trip not found",
+      });
     }
 
     res.json(trip);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 

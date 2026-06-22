@@ -13,4 +13,4 @@ router.post("/", protect, createTrip);
 router.get("/", protect, getMyTrips);
 router.get("/:id", protect, getTripById);
 
-module.exports = router;
+module.exports = router;    
