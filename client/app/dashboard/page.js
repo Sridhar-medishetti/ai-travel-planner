@@ -25,7 +25,7 @@ export default function DashboardPage() {
 
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:5000/api/trips", {
+      const res = await axios.get("https://ai-travel-planner-j9mo.onrender.com/api/trips", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:5000/api/trips/${tripId}`, {
+      await axios.delete(`https://ai-travel-planner-j9mo.onrender.com/api/trips/${tripId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

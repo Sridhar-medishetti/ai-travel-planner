@@ -19,7 +19,7 @@ export default function CreateTripPage() {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/trips",
+        "https://ai-travel-planner-j9mo.onrender.com/api/trips",
         {
           destination,
           numberOfDays: Number(numberOfDays),

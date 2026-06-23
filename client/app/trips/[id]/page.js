@@ -29,7 +29,7 @@ export default function TripDetailsPage({ params }) {
   const fetchTrip = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/trips/${id}`,
+        `https://ai-travel-planner-j9mo.onrender.com/api/trips/${id}`,
         getAuthHeaders()
       );
 
@@ -48,7 +48,7 @@ export default function TripDetailsPage({ params }) {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/trips/${id}/regenerate-day`,
+        `https://ai-travel-planner-j9mo.onrender.com/api/trips/${id}/regenerate-day`,
         {
           day: Number(dayNumber),
           prompt,
@@ -75,7 +75,7 @@ export default function TripDetailsPage({ params }) {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/trips/${id}/add-activity`,
+        `https://ai-travel-planner-j9mo.onrender.com/api/trips/${id}/add-activity`,
         {
           day: Number(activityDay),
           activity: newActivity,
@@ -101,7 +101,7 @@ export default function TripDetailsPage({ params }) {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/trips/${id}/remove-activity`,
+        `https://ai-travel-planner-j9mo.onrender.com/api/trips/${id}/remove-activity`,
         {
           day,
           activityIndex,

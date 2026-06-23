@@ -13,7 +13,7 @@ export default function RegisterPage() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://ai-travel-planner-j9mo.onrender.com/api/auth/register",
         {
           name,
           email,
