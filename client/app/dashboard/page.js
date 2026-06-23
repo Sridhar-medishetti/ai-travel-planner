@@ -34,6 +34,28 @@ export default function DashboardPage() {
     }
   };
 
+  const handleDelete = async (tripId) => {
+    const confirmDelete = confirm("Are you sure you want to delete this trip?");
+
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`http://localhost:5000/api/trips/${tripId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Trip deleted successfully");
+      fetchTrips();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete trip");
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
@@ -67,12 +89,6 @@ export default function DashboardPage() {
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-6">
-            <a
-  href="/create-trip"
-  className="bg-green-600 px-5 py-3 rounded-lg inline-block mb-6"
->
-  + Create Trip
-</a>
           {trips.map((trip) => (
             <div key={trip._id} className="bg-slate-800 p-6 rounded-xl">
               <h2 className="text-2xl font-semibold mb-2">
@@ -85,16 +101,25 @@ export default function DashboardPage() {
                 Interests: {trip.interests?.join(", ")}
               </p>
 
-              <a
-                href={`/trips/${trip._id}`}
-                className="inline-block mt-4 bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700"
-              >
-                View Details
-              </a>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href={`/trips/${trip._id}`}
+                  className="bg-green-600 px-4 py-2 rounded-lg hover:bg-green-700"
+                >
+                  View Details
+                </a>
+
+                <button
+                  onClick={() => handleDelete(trip._id)}
+                  className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
     </div>
   );
-}   
+}
