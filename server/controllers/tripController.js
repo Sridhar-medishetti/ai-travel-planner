@@ -35,7 +35,10 @@ const createTrip = async (req, res) => {
 
 const getMyTrips = async (req, res) => {
   try {
-    const trips = await Trip.find({ user: req.user._id }).sort({ createdAt: -1 });
+    const trips = await Trip.find({ user: req.user._id }).sort({
+      createdAt: -1,
+    });
+
     res.json(trips);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -49,7 +52,9 @@ const getTripById = async (req, res) => {
       user: req.user._id,
     });
 
-    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
 
     res.json(trip);
   } catch (error) {
@@ -64,7 +69,9 @@ const deleteTrip = async (req, res) => {
       user: req.user._id,
     });
 
-    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
 
     res.json({ message: "Trip deleted successfully" });
   } catch (error) {
@@ -81,13 +88,20 @@ const addActivity = async (req, res) => {
       user: req.user._id,
     });
 
-    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
 
-    const selectedDay = trip.itinerary.find((item) => item.day === Number(day));
+    const selectedDay = trip.itinerary.find(
+      (item) => item.day === Number(day)
+    );
 
-    if (!selectedDay) return res.status(404).json({ message: "Day not found" });
+    if (!selectedDay) {
+      return res.status(404).json({ message: "Day not found" });
+    }
 
     selectedDay.activities.push(activity);
+
     await trip.save();
 
     res.json(trip);
@@ -105,13 +119,20 @@ const removeActivity = async (req, res) => {
       user: req.user._id,
     });
 
-    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
 
-    const selectedDay = trip.itinerary.find((item) => item.day === Number(day));
+    const selectedDay = trip.itinerary.find(
+      (item) => item.day === Number(day)
+    );
 
-    if (!selectedDay) return res.status(404).json({ message: "Day not found" });
+    if (!selectedDay) {
+      return res.status(404).json({ message: "Day not found" });
+    }
 
     selectedDay.activities.splice(activityIndex, 1);
+
     await trip.save();
 
     res.json(trip);
@@ -129,11 +150,17 @@ const regenerateDay = async (req, res) => {
       user: req.user._id,
     });
 
-    if (!trip) return res.status(404).json({ message: "Trip not found" });
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
 
-    const selectedDay = trip.itinerary.find((item) => item.day === Number(day));
+    const selectedDay = trip.itinerary.find(
+      (item) => item.day === Number(day)
+    );
 
-    if (!selectedDay) return res.status(404).json({ message: "Day not found" });
+    if (!selectedDay) {
+      return res.status(404).json({ message: "Day not found" });
+    }
 
     selectedDay.activities = [
       `Regenerated activity for Day ${day}: ${prompt}`,
